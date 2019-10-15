@@ -116,6 +116,17 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions = 
+    { halogen-formless =
+        mkPackage
+        [ "halogen-renderless", "variant", "heterogeneous", "generics-rep" ]
+        "https://github.com/thomashoneyman/purescript-halogen-formless.git"
+        "master"
+    , halogen-renderless = 
+        mkPackage
+        ["control"]
+        "https://github.com/thomashoneyman/purescript-halogen-renderless"
+        "master"
+    }
 
 in  upstream // overrides // additions

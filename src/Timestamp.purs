@@ -14,6 +14,7 @@ import Data.Formatter.DateTime  (Formatter
                                 ,format)
 import Effect                   (Effect)
 import Effect.Now               (nowDateTime)
+import Formless                 as F
 import Partial.Unsafe           (unsafePartial)
 
 newtype Timestamp = Timestamp PDT.PreciseDateTime
@@ -30,6 +31,9 @@ instance decodeJsonTimestamp :: DecodeJson Timestamp where
 
 instance encodeJsonTimestamp :: EncodeJson Timestamp where
   encodeJson (Timestamp pdt) = encodeJson $ formatToDateTimeStr $ Timestamp pdt
+
+instance initialTimestamp :: F.Initial Timestamp where
+  initial = defaultTimestamp
 
 -- | Try to parse a `PreciseDateTime` from a string.
 fromString :: String -> Either String Timestamp
