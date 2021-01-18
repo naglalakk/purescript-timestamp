@@ -117,16 +117,39 @@ let upstream =
 let overrides = {=}
 
 let additions = 
-    { halogen-formless =
+    { argonaut =
         mkPackage
-        [ "halogen-renderless", "variant", "heterogeneous", "generics-rep" ]
+        ["argonaut-codecs"
+        ,"argonaut-core"
+        ,"argonaut-traversals"]
+        "https://github.com/purescript-contrib/purescript-argonaut"
+        "2b81ce16b4c0e8cac0be88b4bf616523b6ddda56"
+      , argonaut-codecs =
+        mkPackage
+        ["argonaut-core"
+        ,"arrays"
+        ,"effect"
+        ,"foreign-object"
+        ,"identity"
+        ,"integers"
+        ,"maybe"
+        ,"nonempty"
+        ,"ordered-collections"
+        ,"record"]
+        "https://github.com/purescript-contrib/purescript-argonaut-codecs/"
+        "9b00fcc6b04bd999d3fd3b9de2ae830bff473a71"
+      , argonaut-traversals = 
+        mkPackage
+        ["argonaut-core"
+        ,"argonaut-codecs"
+        ,"profunctor-lenses"]
+        "https://github.com/purescript-contrib/purescript-argonaut-traversals"
+        "9543b517011a4dbc66dfd5cd4d8d774aa620b764"
+    , halogen-formless =
+        mkPackage
+        [ "halogen", "variant", "heterogeneous", "generics-rep", "profunctor-lenses" ]
         "https://github.com/thomashoneyman/purescript-halogen-formless.git"
-        "master"
-    , halogen-renderless = 
-        mkPackage
-        ["control"]
-        "https://github.com/thomashoneyman/purescript-halogen-renderless"
-        "master"
+        "b3f884cbf69a6f130e1f0d0e925766a12a813774"
     }
 
 in  upstream // overrides // additions

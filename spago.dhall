@@ -10,7 +10,6 @@ You can edit this file as you like.
     , "console"
     , "halogen"
     , "halogen-formless"
-    , "halogen-renderless"
     , "formatters"
     , "precise-datetime"
     , "psci-support"

@@ -1,21 +1,23 @@
 module Timestamp where
 
 import Prelude
-import Data.Either              (Either, note, fromRight)
-import Data.Argonaut.Decode     (class DecodeJson
-                                ,decodeJson)
-import Data.Argonaut.Encode     (class EncodeJson, encodeJson)
-import Data.List                (fromFoldable)
-import Data.Newtype             (class Newtype)
-import Data.PreciseDateTime     as PDT
-import Data.RFC3339String       (RFC3339String(..))
-import Data.Formatter.DateTime  (Formatter
-                                ,FormatterCommand(..)
-                                ,format)
-import Effect                   (Effect)
-import Effect.Now               (nowDateTime)
-import Formless                 as F
-import Partial.Unsafe           (unsafePartial)
+
+import Data.Argonaut (JsonDecodeError(..), printJsonDecodeError)
+import Data.Argonaut.Decode (class DecodeJson, decodeJson)
+import Data.Argonaut.Decode.Error (JsonDecodeError)
+import Data.Argonaut.Encode (class EncodeJson, encodeJson)
+import Data.Either (Either(..), fromRight, note)
+import Data.Formatter.DateTime (Formatter, FormatterCommand(..), format)
+import Data.List (fromFoldable)
+import Data.Maybe (Maybe(..))
+import Data.Newtype (class Newtype)
+import Data.PreciseDateTime (fromRFC3339String)
+import Data.PreciseDateTime as PDT
+import Data.RFC3339String (RFC3339String(..))
+import Effect (Effect)
+import Effect.Now (nowDateTime)
+import Formless as F
+import Partial.Unsafe (unsafePartial)
 
 newtype Timestamp = Timestamp PDT.PreciseDateTime
 
@@ -36,12 +38,13 @@ instance initialTimestamp :: F.Initial Timestamp where
   initial = defaultTimestamp
 
 -- | Try to parse a `PreciseDateTime` from a string.
-fromString :: String -> Either String Timestamp
-fromString = 
-  map Timestamp
-    <<< note "Could not parse RFC339 string" 
-    <<< PDT.fromRFC3339String 
-    <<< RFC3339String
+fromString :: String -> Either JsonDecodeError Timestamp
+fromString str = do
+  let
+    tm = fromRFC3339String $ RFC3339String str
+  case tm of
+    Just t -> Right $ Timestamp t
+    Nothing -> Left $ TypeMismatch "Failed to parse PreciseDateTime, fromRFC3339String returned Nothing"
 
 -- | Default Timestamp 
 -- useful for when you need to 
