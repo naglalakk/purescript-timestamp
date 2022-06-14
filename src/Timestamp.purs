@@ -16,7 +16,6 @@ import Data.PreciseDateTime as PDT
 import Data.RFC3339String (RFC3339String(..))
 import Effect (Effect)
 import Effect.Now (nowDateTime)
-import Formless as F
 import Partial.Unsafe (unsafePartial)
 
 newtype Timestamp = Timestamp PDT.PreciseDateTime
@@ -34,9 +33,6 @@ instance decodeJsonTimestamp :: DecodeJson Timestamp where
 instance encodeJsonTimestamp :: EncodeJson Timestamp where
   encodeJson (Timestamp pdt) = encodeJson $ formatToDateTimeStr $ Timestamp pdt
 
-instance initialTimestamp :: F.Initial Timestamp where
-  initial = defaultTimestamp
-
 -- | Try to parse a `PreciseDateTime` from a string.
 fromString :: String -> Either JsonDecodeError Timestamp
 fromString str = do
@@ -45,17 +41,6 @@ fromString str = do
   case tm of
     Just t -> Right $ Timestamp t
     Nothing -> Left $ TypeMismatch "Failed to parse PreciseDateTime, fromRFC3339String returned Nothing"
-
--- | Default Timestamp 
--- useful for when you need to 
--- provide a initial/default case for Timestamp
--- e.g. halogen-formless Initial instance
-defaultTimestamp :: Timestamp
-defaultTimestamp 
-  = unsafePartial $ 
-    fromRight $ 
-    fromString 
-    "2019-07-01T00:00:00"
 
 -- | Get a current nowDateTime
 -- wrapped in Timestamp
