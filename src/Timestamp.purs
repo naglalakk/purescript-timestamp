@@ -2,11 +2,11 @@ module Timestamp where
 
 import Prelude
 
-import Data.Argonaut (JsonDecodeError(..), printJsonDecodeError)
+import Data.Argonaut (JsonDecodeError(..))
 import Data.Argonaut.Decode (class DecodeJson, decodeJson)
 import Data.Argonaut.Decode.Error (JsonDecodeError)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson)
-import Data.Either (Either(..), fromRight, note)
+import Data.Either (Either(..))
 import Data.Formatter.DateTime (Formatter, FormatterCommand(..), format)
 import Data.List (fromFoldable)
 import Data.Maybe (Maybe(..))
@@ -16,7 +16,6 @@ import Data.PreciseDateTime as PDT
 import Data.RFC3339String (RFC3339String(..))
 import Effect (Effect)
 import Effect.Now (nowDateTime)
-import Partial.Unsafe (unsafePartial)
 
 newtype Timestamp = Timestamp PDT.PreciseDateTime
 
@@ -98,13 +97,13 @@ dateTimeShortFormatter
     ]
 
 formatToDateStr :: Timestamp -> String
-formatToDateStr (Timestamp (PDT.PreciseDateTime dt nan))
+formatToDateStr (Timestamp (PDT.PreciseDateTime dt _))
   = format dateFormatter dt
 
 formatToDateTimeShortStr :: Timestamp -> String
-formatToDateTimeShortStr (Timestamp (PDT.PreciseDateTime dt nan))
+formatToDateTimeShortStr (Timestamp (PDT.PreciseDateTime dt _))
   = format dateTimeShortFormatter dt
 
 formatToDateTimeStr :: Timestamp -> String
-formatToDateTimeStr (Timestamp (PDT.PreciseDateTime dt nan))
+formatToDateTimeStr (Timestamp (PDT.PreciseDateTime dt _))
   = format dateTimeFormatter dt

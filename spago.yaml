@@ -1,0 +1,23 @@
+package:
+  dependencies:
+  - aff
+  - argonaut
+  - argonaut-codecs
+  - console
+  - effect
+  - either
+  - formatters
+  - lists
+  - maybe
+  - newtype
+  - now
+  - partial
+  - precise-datetime
+  - prelude
+  - psci-support
+  - spec
+  name: timestamp
+workspace:
+  extra_packages: {}
+  package_set:
+    registry: 43.2.0
